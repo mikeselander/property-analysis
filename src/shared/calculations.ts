@@ -1,14 +1,14 @@
 import { DEFAULT_MORTGAGE_YEARS, AVERAGE_PMI_PERCENT } from './constants';
 
 /**
- *
+ * Calculate Principal and Interest per month.
  *
  * @param purchasePrice
  * @param percentDown
  * @param interestRate
  * @returns {number}
  */
-export const calculateMonthlyPandI = (purchasePrice, percentDown, interestRate ) => {
+export const calculateMonthlyPandI = ( purchasePrice: number, percentDown: number, interestRate: number ) => {
     const numberOfPaymentsTotal = DEFAULT_MORTGAGE_YEARS * 12;
     const principal = calculatePrincipal( purchasePrice, percentDown );
     const interestFloat = convertPercentInteger(interestRate) / 12;
@@ -23,17 +23,19 @@ export const calculateMonthlyPandI = (purchasePrice, percentDown, interestRate )
 };
 
 /**
+ * Calculate total monthly payment for mortgage.
  *
  * @param pAndI
  * @param insurance
  * @param taxes
  * @returns {*}
  */
-export const calculateMonthlyPayment = ( pAndI, insurance, taxes ) => {
+export const calculateMonthlyPayment = ( pAndI: number, insurance: number, taxes: number ) => {
     return pAndI + insurance + taxes;
 };
 
 /**
+ * Calculate all monthly non-mortgage costs.
  *
  * @param monthlyRent
  * @param vacancy
@@ -43,7 +45,7 @@ export const calculateMonthlyPayment = ( pAndI, insurance, taxes ) => {
  * @param hoa
  * @returns {number}
  */
-export const calculateMonthlyFixedExpenses = (monthlyRent, vacancy, maintenance, capEx, management, hoa) => {
+export const calculateMonthlyFixedExpenses = ( monthlyRent: number, vacancy: number, maintenance: number, capEx: number, management: number, hoa: number ) => {
     return (monthlyRent * convertPercentInteger(vacancy))
         + (monthlyRent * convertPercentInteger(maintenance))
         + (monthlyRent * convertPercentInteger(capEx))
@@ -52,28 +54,29 @@ export const calculateMonthlyFixedExpenses = (monthlyRent, vacancy, maintenance,
 };
 
 /**
+ * Calculate taxes for a whole year.
  *
  * @param purchasePrice
  * @param taxRate
  * @returns {number}
  */
-export const calculateYearlyTaxes = ( purchasePrice, taxRate ) => {
+export const calculateYearlyTaxes = ( purchasePrice: number, taxRate: number ) => {
     return purchasePrice * convertPercentInteger(taxRate);
 };
 
 /**
+ * Calculate the caprate for the money we've put down.
  *
  * @param moneyDown
  * @param monthlyCashFlow
  * @returns {number}
  */
-export const calculateCapRate = ( moneyDown, monthlyCashFlow ) => {
-
-    console.table( (monthlyCashFlow * 12), moneyDown );
+export const calculateCapRate = ( moneyDown: number, monthlyCashFlow: number ) => {
     return Math.round( ((monthlyCashFlow * 12) / moneyDown)  * 100 );
 };
 
 /**
+ * Calculate the monthly cash flow
  *
  * @param mortgagePayment
  * @param fixedExpenses
@@ -82,7 +85,7 @@ export const calculateCapRate = ( moneyDown, monthlyCashFlow ) => {
  * @param monthlyInsurance
  * @returns {number}
  */
-export const calculateMonthlyCashFlow = ( mortgagePayment, fixedExpenses, monthlyRent ) => {
+export const calculateMonthlyCashFlow = ( mortgagePayment: number, fixedExpenses: number, monthlyRent: number ) => {
     return Number((monthlyRent - mortgagePayment - fixedExpenses).toFixed(2));
 };
 
@@ -94,7 +97,7 @@ export const calculateMonthlyCashFlow = ( mortgagePayment, fixedExpenses, monthl
  * @param percentDown
  * @returns {*}
  */
-export const calculateMonthlyInsurance = ( insuranceCost, hasPmi, price, percentDown ) => {
+export const calculateMonthlyInsurance = ( insuranceCost: number, hasPmi: boolean, price: number, percentDown: number ) => {
     const pmiCost = hasPmi ? calculateMonthlyPmi( price, percentDown ) : 0;
 
     return insuranceCost + pmiCost;
@@ -106,7 +109,7 @@ export const calculateMonthlyInsurance = ( insuranceCost, hasPmi, price, percent
  * @param percentDown
  * @returns {number}
  */
-export const calculateMonthlyPmi = ( purchasePrice, percentDown ) => {
+export const calculateMonthlyPmi = ( purchasePrice: number, percentDown: number ) => {
     return (calculatePrincipal( purchasePrice, percentDown ) * AVERAGE_PMI_PERCENT) / 12;
 };
 
@@ -118,7 +121,7 @@ export const calculateMonthlyPmi = ( purchasePrice, percentDown ) => {
  * @param repairCosts
  * @returns {number}
  */
-export const calculateMoneyDown = ( purchasePrice, percentDown, closingCosts, repairCosts ) => {
+export const calculateMoneyDown = ( purchasePrice: number, percentDown: number, closingCosts: number, repairCosts: number ) => {
     return (purchasePrice * convertPercentInteger(percentDown)) + closingCosts + Number( repairCosts );
 };
 
@@ -128,7 +131,7 @@ export const calculateMoneyDown = ( purchasePrice, percentDown, closingCosts, re
  * @param percentDown
  * @returns {number}
  */
-export const calculatePrincipal = ( purchasePrice, percentDown ) => {
+export const calculatePrincipal = ( purchasePrice: number, percentDown: number ) => {
     return purchasePrice - (convertPercentInteger(percentDown) * purchasePrice);
 };
 
@@ -137,4 +140,4 @@ export const calculatePrincipal = ( purchasePrice, percentDown ) => {
  * @param percentInteger
  * @returns {number}
  */
-const convertPercentInteger = percentInteger => percentInteger / 100;
+const convertPercentInteger = ( percentInteger: number ) => percentInteger / 100;

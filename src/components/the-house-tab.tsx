@@ -12,7 +12,18 @@ import Slider from "@material-ui/core/Slider";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 
-const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handleTypeChange, handleToggleChange, values }) => {
+import { ApplicationData } from './App';
+
+interface HouseTabProps {
+    handleChange: (name: string) => void;
+    handleCityChange: () => void;
+    handleSliderChange: (name: string) => void;
+    handleTypeChange: () => void;
+    handleToggleChange: (name: string) => void;
+    values: ApplicationData;
+}
+
+const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handleTypeChange, handleToggleChange, values }: HouseTabProps) => {
     return (
         <Grid
             container
@@ -25,6 +36,7 @@ const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handl
                     <InputLabel htmlFor="city">City</InputLabel>
                     <Select
                         value={values.city}
+                        // @ts-ignore
                         onChange={handleCityChange()}
                         inputProps={{
                             name: 'city',
@@ -32,7 +44,13 @@ const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handl
                         }}
                     >
                         {Object.keys(CITY_DATA)
-                            .map(key => <MenuItem key value={key}>{CITY_DATA[key].properName}</MenuItem>)
+                            .map(key => <MenuItem
+                                    key={key}
+                                    value={key}
+                                >
+                                        {CITY_DATA[key].properName}
+                                </MenuItem>
+                            )
                         }
                     </Select>
                 </FormControl>
@@ -43,6 +61,7 @@ const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handl
                     <InputLabel htmlFor="type">Type of Rental</InputLabel>
                     <Select
                         value={values.typeOfRental}
+                        // @ts-ignore
                         onChange={handleTypeChange()}
                         inputProps={{
                             name: 'typeOfRental',
@@ -64,6 +83,7 @@ const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handl
                     <Grid container spacing={2}>
                         <Grid item md>
                             <Slider
+                                // @ts-ignore
                                 onChange={handleSliderChange('price')}
                                 value={typeof values.price === 'number' ? values.price : 100000}
                                 aria-labelledby="input-slider"
@@ -78,6 +98,7 @@ const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handl
                             <Input
                                 value={values.price}
                                 margin="dense"
+                                // @ts-ignore
                                 onChange={handleChange('price')}
                                 inputProps={{
                                     step: 1000,
@@ -95,10 +116,11 @@ const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handl
 
             <Grid item xs={12}>
                 <FormControl fullWidth>
-                    <InputLabel htmlFor="adornment-amount">Repair Costs</InputLabel>
+                    <InputLabel htmlFor="adornment-repairCosts">Repair Costs</InputLabel>
                     <Input
-                        id="adornment-amount"
+                        id="adornment-repairCosts"
                         value={values.repairCosts}
+                        // @ts-ignore
                         onChange={handleChange('repairCosts')}
                         startAdornment={<InputAdornment position="start">$</InputAdornment>}
                     />
@@ -107,10 +129,11 @@ const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handl
 
             <Grid item xs={12}>
                 <FormControl fullWidth>
-                    <InputLabel htmlFor="adornment-amount">Monthly Rent</InputLabel>
+                    <InputLabel htmlFor="adornment-rent">Monthly Rent</InputLabel>
                     <Input
-                        id="adornment-amount"
+                        id="adornment-rent"
                         value={values.monthlyRent}
+                        // @ts-ignore
                         onChange={handleChange('monthlyRent')}
                         startAdornment={<InputAdornment position="start">$</InputAdornment>}
                     />
@@ -119,10 +142,11 @@ const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handl
 
             <Grid item xs={5} sm={6}>
                 <FormControl fullWidth>
-                    <InputLabel htmlFor="adornment-amount">Interest Rate</InputLabel>
+                    <InputLabel htmlFor="adornment-interestRate">Interest Rate</InputLabel>
                     <Input
-                        id="adornment-amount"
+                        id="adornment-interestRate"
                         value={values.interestRate}
+                        // @ts-ignore
                         onChange={handleChange('interestRate')}
                         endAdornment={<InputAdornment position="end">%</InputAdornment>}
                     />
@@ -131,10 +155,11 @@ const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handl
 
             <Grid item xs={5} sm={6}>
                 <FormControl fullWidth>
-                    <InputLabel htmlFor="adornment-amount">Closing Costs</InputLabel>
+                    <InputLabel htmlFor="adornment-closingcosts">Closing Costs</InputLabel>
                     <Input
-                        id="adornment-amount"
+                        id="adornment-closingcosts"
                         value={values.closingCosts}
+                        // @ts-ignore
                         onChange={handleChange('closingCosts')}
                         startAdornment={<InputAdornment position="start">$</InputAdornment>}
                     />
@@ -143,10 +168,11 @@ const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handl
 
             <Grid item xs={5} sm={6}>
                 <FormControl fullWidth>
-                    <InputLabel htmlFor="adornment-amount">Percent Down</InputLabel>
+                    <InputLabel htmlFor="adornment-percentDown">Percent Down</InputLabel>
                     <Input
-                        id="adornment-amount"
+                        id="adornment-percentDown"
                         value={values.percentDown}
+                        // @ts-ignore
                         onChange={handleChange('percentDown')}
                         endAdornment={<InputAdornment position="end">%</InputAdornment>}
                     />
@@ -159,6 +185,7 @@ const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handl
                         control={
                             <Switch
                                 checked={values.pmi}
+                                // @ts-ignore
                                 onChange={handleToggleChange('pmi')}
                                 value="pmi"
                                 color="primary"

@@ -12,6 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 
 import { DESIRED_CAP_RATE, DESIRED_MONTHLY_CASHFLOW } from "../shared/constants";
+import { ApplicationData } from './App';
 
 import {
     calculateCapRate,
@@ -24,7 +25,7 @@ import {
 } from '../shared/calculations';
 import Typography from "@material-ui/core/Typography";
 
-const Results = ( { allValues } ) => {
+const Results = ( { allValues }: { allValues: ApplicationData } ) => {
 
     const {
         capEx,

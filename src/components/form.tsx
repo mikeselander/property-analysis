@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactChildren} from 'react';
 
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
@@ -10,9 +10,10 @@ import Typography from '@material-ui/core/Typography'
 import OngoingCostsTab from './ongoing-costs-tab';
 import TheHouseTab from './the-house-tab';
 
-import {CITY_DATA} from "../shared/constants";
+import { CITY_DATA, LOAN_TYPE_CONFIG } from "../shared/constants";
+import { ApplicationData } from './App';
 
-function TabPanel(props) {
+function TabPanel(props: { children: ReactChildren | JSX.Element, value: any, index: number }) {
     const {children, value, index, ...other} = props;
 
     return (
@@ -29,43 +30,39 @@ function TabPanel(props) {
     );
 }
 
-function a11yProps(index) {
+function a11yProps(index: number) {
     return {
         id: `scrollable-auto-tab-${index}`,
         'aria-controls': `scrollable-auto-tabpanel-${index}`,
     };
 }
 
-const InputForm = ({copyValues, allValues: values}) => {
-    /**
-     * Hold configuration of certain auto-filled values that we can fill in.
-     *
-     * @type {Object}
-     */
-    const typeConfig = {
-        'rental': {
-            percentDown: 20,
-            pmi: false,
-        },
-        'house-hack': {
-            percentDown: 5,
-            pmi: true,
-        },
-    };
+const InputForm = ({copyValues, allValues: values}: {copyValues: (values: object) => void, allValues: ApplicationData }) => {
+    const handleChange = ( prop: string ) => ( event: Event ): void => {
+        if ( ! event?.target?.value ) {
+            return;
+        }
 
-    const handleChange = prop => event => {
         copyValues({...values, [prop]: event.target.value});
     };
 
-    const handleSliderChange = prop => (event, newValue) => {
+    const handleSliderChange = ( prop: string ) => (event: Event, newValue): void => {
         copyValues({...values, [prop]: newValue});
     };
 
-    const handleToggleChange = prop => event => {
+    const handleToggleChange = ( prop: string ) => ( event: Event ): void => {
+        if ( ! event?.target?.checked ) {
+            return;
+        }
+
         copyValues({...values, [prop]: event.target.checked});
     };
 
-    const handleCityChange = () => event => {
+    const handleCityChange = () => ( event: Event ): void => {
+        if ( ! event?.target?.value ) {
+            return;
+        }
+
         const city = event.target.value;
 
         copyValues(
@@ -77,21 +74,25 @@ const InputForm = ({copyValues, allValues: values}) => {
         );
     };
 
-    const handleTypeChange = () => event => {
+    const handleTypeChange = () => ( event: Event ): void => {
+        if ( ! event?.target?.value ) {
+            return;
+        }
+
         const type = event.target.value;
 
         copyValues(
             {
                 ...values,
                 'typeOfRental': type,
-                ...typeConfig[type],
+                ...LOAN_TYPE_CONFIG[type],
             }
         );
     };
 
     const [value, setValue] = React.useState(0);
 
-    const handleTabChange = (event, newValue) => {
+    const handleTabChange = (event: Event, newValue: string): void => {
         setValue(newValue);
     };
 
@@ -100,6 +101,7 @@ const InputForm = ({copyValues, allValues: values}) => {
             <AppBar position="static" color="default">
                 <Tabs
                     value={value}
+                    // @ts-ignore
                     onChange={handleTabChange}
                     indicatorColor="primary"
                     textColor="primary"

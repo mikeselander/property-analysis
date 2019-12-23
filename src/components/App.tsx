@@ -14,6 +14,25 @@ import {
     STARTING_INTEREST_RATE ,
 } from "../shared/constants";
 
+export interface ApplicationData {
+    capEx: number;
+    city: string;
+    closingCosts: number;
+    hoa: number;
+    insuranceCost: number;
+    interestRate: number;
+    maintenance: number;
+    management: number;
+    monthlyRent: number;
+    percentDown: number;
+    pmi: boolean;
+    price: number | string;
+    repairCosts: number;
+    taxRate: number;
+    typeOfRental: 'rental'|'house-hack';
+    vacancy: number;
+}
+
 /**
  * @todo::
  *
@@ -24,30 +43,26 @@ import {
 
 class App extends React.Component {
 
-    constructor(props) {
-        super( props );
+    state: ApplicationData = {
+        capEx: 5,
+        city: DEFAULT_CITY,
+        closingCosts: 3000,
+        hoa: 0,
+        insuranceCost: 50,
+        interestRate: STARTING_INTEREST_RATE,
+        maintenance: 5,
+        management: 11,
+        monthlyRent: 0,
+        percentDown: 20,
+        pmi: false,
+        price: 100000,
+        repairCosts: 0,
+        taxRate: CITY_DATA[DEFAULT_CITY].taxRate,
+        typeOfRental: 'rental',
+        vacancy: CITY_DATA[DEFAULT_CITY].vacancy,
+    };
 
-        this.state = {
-            capEx: 5,
-            city: DEFAULT_CITY,
-            closingCosts: 3000,
-            hoa: 0,
-            insuranceCost: 50,
-            interestRate: STARTING_INTEREST_RATE,
-            maintenance: 5,
-            management: 11,
-            monthlyRent: 0,
-            percentDown: 20,
-            pmi: false,
-            price: 100000,
-            repairCosts: 0,
-            taxRate: CITY_DATA[DEFAULT_CITY].taxRate,
-            typeOfRental: 'rental',
-            vacancy: CITY_DATA[DEFAULT_CITY].vacancy,
-        };
-    }
-
-    copyValues( values ) {
+    copyValues( values: object ) {
         this.setState( values );
     }
 
@@ -64,7 +79,7 @@ class App extends React.Component {
                             alignItems="flex-start"
                             justify="space-between"
                         >
-                            <InputForm allValues={ this.state } copyValues={ state => this.copyValues( state ) }  />
+                            <InputForm allValues={ this.state } copyValues={ ( state: object ) => this.copyValues( state ) }  />
                             <Results allValues={ this.state } />
                         </Grid>
                     </Container>
