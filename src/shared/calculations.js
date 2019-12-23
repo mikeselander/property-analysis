@@ -1,20 +1,5 @@
 import { DEFAULT_MORTGAGE_YEARS, AVERAGE_PMI_PERCENT } from './constants';
 
-
-var M; //monthly mortgage payment
-var P = 400000; //principle / initial amount borrowed
-var I = 3.5 / 100 / 12; //monthly interest rate
-var N = 30 * 12; //number of payments months
-
-//monthly mortgage payment
-M = monthlyPayment(P, N, I);
-
-console.log(M);
-
-function monthlyPayment(p, n, i) {
-    return p * i * (Math.pow(1 + i, n)) / (Math.pow(1 + i, n) - 1);
-}
-
 /**
  *
  *
@@ -55,13 +40,15 @@ export const calculateMonthlyPayment = ( pAndI, insurance, taxes ) => {
  * @param maintenance
  * @param capEx
  * @param management
+ * @param hoa
  * @returns {number}
  */
-export const calculateMonthlyFixedExpenses = (monthlyRent, vacancy, maintenance, capEx, management) => {
+export const calculateMonthlyFixedExpenses = (monthlyRent, vacancy, maintenance, capEx, management, hoa) => {
     return (monthlyRent * convertPercentInteger(vacancy))
         + (monthlyRent * convertPercentInteger(maintenance))
         + (monthlyRent * convertPercentInteger(capEx))
         + (monthlyRent * convertPercentInteger(management))
+        + hoa
 };
 
 /**
@@ -132,7 +119,7 @@ export const calculateMonthlyPmi = ( purchasePrice, percentDown ) => {
  * @returns {number}
  */
 export const calculateMoneyDown = ( purchasePrice, percentDown, closingCosts, repairCosts ) => {
-    return (purchasePrice * convertPercentInteger(percentDown)) + closingCosts + repairCosts;
+    return (purchasePrice * convertPercentInteger(percentDown)) + closingCosts + Number( repairCosts );
 };
 
 /**

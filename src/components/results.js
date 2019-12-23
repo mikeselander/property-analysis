@@ -11,7 +11,7 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 
-import { DESIRED_CAP_RATE, DESIRED_MONTHLY_CASHFLOW } from "./shared/constants";
+import { DESIRED_CAP_RATE, DESIRED_MONTHLY_CASHFLOW } from "../shared/constants";
 
 import {
     calculateCapRate,
@@ -21,13 +21,15 @@ import {
     calculateMonthlyInsurance,
     calculateMonthlyPandI,
     calculateYearlyTaxes, calculateMonthlyPayment,
-} from './shared/calculations';
+} from '../shared/calculations';
+import Typography from "@material-ui/core/Typography";
 
 const Results = ( { allValues } ) => {
 
     const {
         capEx,
         closingCosts,
+        hoa,
         interestRate,
         insuranceCost,
         maintenance,
@@ -53,7 +55,7 @@ const Results = ( { allValues } ) => {
     const monthlyInsurance = calculateMonthlyInsurance(insuranceCost, pmi, price, percentDown);
     const monthlyPayment   = calculateMonthlyPayment(monthlyPandI, monthlyInsurance, monthlyTaxes);
 
-    const fixedExpenses    = calculateMonthlyFixedExpenses(monthlyRent, vacancy, maintenance, capEx, management);
+    const fixedExpenses    = calculateMonthlyFixedExpenses(monthlyRent, vacancy, maintenance, capEx, management, hoa);
     const cashFlow         = calculateMonthlyCashFlow(monthlyPayment, fixedExpenses, monthlyRent);
     const moneyDown        = calculateMoneyDown(price, percentDown, closingCosts, repairCosts);
     const capRate          = calculateCapRate(moneyDown, cashFlow);
@@ -64,7 +66,9 @@ const Results = ( { allValues } ) => {
     const noIcon  = <NotInterestedIcon fontSize="small" color="error" />;
     const yesIcon = <CheckCircleOutlineIcon fontSize="small" color="action" />;
 
-    const rows = [
+    const [showMore, setShowMore] = React.useState(false);
+
+    const mainRows = [
         {
             name: 'Money Down',
             data: formatter.format(moneyDown),
@@ -72,12 +76,10 @@ const Results = ( { allValues } ) => {
         {
             name: 'Monthly Payment',
             data: formatter.format(monthlyPayment),
-            //icon: <ExpandMoreIcon color="action"/>,
         },
         {
             name: 'Fixed Expenses',
             data: formatter.format(fixedExpenses),
-            //icon: <ExpandMoreIcon color="action"/>,
         },
         {
             name: 'Cash Flow',
@@ -88,6 +90,37 @@ const Results = ( { allValues } ) => {
             name: 'Cap Rate',
             data: `${capRate}%`,
             icon: doesCapRate ? yesIcon : noIcon,
+        },
+    ];
+
+    const individualRows = [
+        {
+            name: 'P and I',
+            data: formatter.format(monthlyPandI),
+        },
+        {
+            name: 'Taxes',
+            data: formatter.format(yearlyTaxes / 12),
+        },
+        {
+            name: 'Insurance',
+            data: formatter.format(monthlyInsurance),
+        },
+        {
+            name: 'Vacancy',
+            data: formatter.format((vacancy/100) * monthlyRent),
+        },
+        {
+            name: 'Maintenance',
+            data: formatter.format((maintenance/100) * monthlyRent),
+        },
+        {
+            name: 'CapEx',
+            data: formatter.format((capEx/100) * monthlyRent),
+        },
+        {
+            name: 'Management',
+            data: formatter.format((management/100) * monthlyRent),
         },
     ];
 
@@ -104,17 +137,37 @@ const Results = ( { allValues } ) => {
             <Grid item xs={12} sm={12} alignContent="flex-start">
                 <Table  aria-label="simple table">
                     <TableBody>
-                        {rows.map(row => (
+                        {mainRows.map(row => (
                             <TableRow key={row.name}>
                                 <TableCell component="th" scope="row">
                                     {row.name}
                                 </TableCell>
                                 <TableCell align="right">{row.data} {row.icon ? row.icon : null}</TableCell>
-                                {/*<TableCell align="left">{row.icon ? row.icon : null}</TableCell>*/}
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
+            </Grid>
+
+            <Grid item xs={12} sm={12} alignContent="flex-start">
+                <Grid container justify="space-between" onClick={ () => setShowMore( ! showMore ) }>
+                    <Typography variant="h6">Details</Typography>
+                    <ExpandMoreIcon color="action" />
+                </Grid>
+                { showMore && ( <Table aria-label="simple table">
+                    <TableBody>
+                        {individualRows.map(row => (
+                            <TableRow key={row.name}>
+                                <TableCell component="th" scope="row">
+                                    {row.name}
+                                </TableCell>
+                                <TableCell align="right">
+                                    {row.data}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table> ) }
             </Grid>
         </Grid>
     )
