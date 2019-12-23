@@ -38,10 +38,13 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
         monthlyRent,
         percentDown,
         pmi,
-        price,
-        repairCosts,
         taxRate,
         vacancy,
+    } = allValues;
+
+    let {
+        price,
+        repairCosts,
     } = allValues;
 
     const formatter = new Intl.NumberFormat('en-US', {
@@ -49,6 +52,9 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
         currency: 'USD',
         minimumFractionDigits: 2
     });
+
+    price       = Number(price);
+    repairCosts = Number(repairCosts);
 
     const monthlyPandI     = calculateMonthlyPandI(price, percentDown, interestRate);
     const yearlyTaxes      = calculateYearlyTaxes(price, taxRate);

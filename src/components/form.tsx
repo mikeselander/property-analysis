@@ -38,7 +38,7 @@ function a11yProps(index: number) {
 }
 
 const InputForm = ({copyValues, allValues: values}: {copyValues: (values: object) => void, allValues: ApplicationData }) => {
-    const handleChange = ( prop: string ) => ( event: Event ): void => {
+    const handleChange = ( prop: string ) => ( event: { target: HTMLInputElement; } ): void => {
         if ( ! event?.target?.value ) {
             return;
         }
@@ -46,11 +46,11 @@ const InputForm = ({copyValues, allValues: values}: {copyValues: (values: object
         copyValues({...values, [prop]: event.target.value});
     };
 
-    const handleSliderChange = ( prop: string ) => (event: Event, newValue): void => {
+    const handleSliderChange = ( prop: string ) => (event: Event, newValue: string|number): void => {
         copyValues({...values, [prop]: newValue});
     };
 
-    const handleToggleChange = ( prop: string ) => ( event: Event ): void => {
+    const handleToggleChange = ( prop: string ) => ( event: { target: HTMLInputElement; } ): void => {
         if ( ! event?.target?.checked ) {
             return;
         }
@@ -58,7 +58,7 @@ const InputForm = ({copyValues, allValues: values}: {copyValues: (values: object
         copyValues({...values, [prop]: event.target.checked});
     };
 
-    const handleCityChange = () => ( event: Event ): void => {
+    const handleCityChange = () => ( event: { target: HTMLInputElement; } ): void => {
         if ( ! event?.target?.value ) {
             return;
         }
@@ -74,7 +74,7 @@ const InputForm = ({copyValues, allValues: values}: {copyValues: (values: object
         );
     };
 
-    const handleTypeChange = () => ( event: Event ): void => {
+    const handleTypeChange = () => ( event: { target: HTMLInputElement; } ): void => {
         if ( ! event?.target?.value ) {
             return;
         }
@@ -92,7 +92,7 @@ const InputForm = ({copyValues, allValues: values}: {copyValues: (values: object
 
     const [value, setValue] = React.useState(0);
 
-    const handleTabChange = (event: Event, newValue: string): void => {
+    const handleTabChange = (event: Event, newValue: number): void => {
         setValue(newValue);
     };
 

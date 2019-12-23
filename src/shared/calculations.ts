@@ -122,7 +122,7 @@ export const calculateMonthlyPmi = ( purchasePrice: number, percentDown: number 
  * @returns {number}
  */
 export const calculateMoneyDown = ( purchasePrice: number, percentDown: number, closingCosts: number, repairCosts: number ) => {
-    return (purchasePrice * convertPercentInteger(percentDown)) + closingCosts + Number( repairCosts );
+    return (purchasePrice * convertPercentInteger(percentDown)) + closingCosts + repairCosts;
 };
 
 /**
