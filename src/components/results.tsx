@@ -29,7 +29,6 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
 
     const {
         capEx,
-        closingCosts,
         hoa,
         interestRate,
         insuranceCost,
@@ -43,6 +42,7 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
     } = allValues;
 
     let {
+        closingCosts,
         price,
         repairCosts,
     } = allValues;
@@ -55,6 +55,7 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
 
     price       = Number(price);
     repairCosts = Number(repairCosts);
+    closingCosts = Number(closingCosts);
 
     const monthlyPandI     = calculateMonthlyPandI(price, percentDown, interestRate);
     const yearlyTaxes      = calculateYearlyTaxes(price, taxRate);
