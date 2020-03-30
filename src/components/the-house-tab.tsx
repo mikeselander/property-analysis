@@ -58,7 +58,7 @@ const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handl
 
             <Grid item xs={12}>
                 <FormControl fullWidth>
-                    <InputLabel htmlFor="type">Type of Rental</InputLabel>
+                    <InputLabel htmlFor="type">Type of Financing</InputLabel>
                     <Select
                         value={values.typeOfRental}
                         // @ts-ignore
@@ -68,8 +68,8 @@ const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handl
                             id: 'type',
                         }}
                     >
-                        <MenuItem value='rental'>Simple Rental</MenuItem>
-                        <MenuItem value='house-hack'>House Hack</MenuItem>
+                        <MenuItem value='rental'>20% Down Mortgage</MenuItem>
+                        <MenuItem value='house-hack'>House Hack (5% down + PMI)</MenuItem>
                     </Select>
                 </FormControl>
             </Grid>
@@ -129,7 +129,7 @@ const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handl
 
             <Grid item xs={12}>
                 <FormControl fullWidth>
-                    <InputLabel htmlFor="adornment-rent">Monthly Rent</InputLabel>
+                    <InputLabel htmlFor="adornment-rent">Total Monthly Rent</InputLabel>
                     <Input
                         id="adornment-rent"
                         value={values.monthlyRent}

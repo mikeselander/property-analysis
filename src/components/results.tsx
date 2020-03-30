@@ -21,7 +21,9 @@ import {
     calculateMonthlyFixedExpenses,
     calculateMonthlyInsurance,
     calculateMonthlyPandI,
-    calculateYearlyTaxes, calculateMonthlyPayment,
+    calculateYearlyTaxes,
+    calculateMonthlyPayment,
+    calculateToCashflowGoalByRent,
 } from '../shared/calculations';
 import Typography from "@material-ui/core/Typography";
 
@@ -34,7 +36,6 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
         insuranceCost,
         maintenance,
         management,
-        monthlyRent,
         percentDown,
         pmi,
         taxRate,
@@ -43,6 +44,7 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
 
     let {
         closingCosts,
+        monthlyRent,
         price,
         repairCosts,
     } = allValues;
@@ -53,6 +55,7 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
         minimumFractionDigits: 2
     });
 
+    monthlyRent = Number(monthlyRent);
     price       = Number(price);
     repairCosts = Number(repairCosts);
     closingCosts = Number(closingCosts);
@@ -70,6 +73,11 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
 
     const doesCashFlow = (DESIRED_MONTHLY_CASHFLOW < cashFlow);
     const doesCapRate  = (DESIRED_CAP_RATE < capRate);
+
+    let byRentIncrease: number;
+    if (! doesCashFlow) {
+        byRentIncrease = calculateToCashflowGoalByRent(monthlyPayment, hoa, capEx, maintenance, vacancy, management);
+    }
 
     const noIcon  = <NotInterestedIcon fontSize="small" color="error" />;
     const yesIcon = <CheckCircleOutlineIcon fontSize="small" color="action" />;
@@ -132,6 +140,18 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
         },
     ];
 
+    const toCashflowRows = [
+        {
+            name: 'By Purchase Price',
+            data: 0,
+        },
+        {
+            name: 'By Rent',
+            // @ts-ignore
+            data: formatter.format(byRentIncrease),
+        },
+    ];
+
     return (
         <Grid
             item
@@ -155,6 +175,21 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
                         ))}
                     </TableBody>
                 </Table>
+
+                {!doesCashFlow && (
+                    <Table aria-label="simple table">
+                        <TableBody>
+                            {toCashflowRows.map(row => (
+                                <TableRow key={row.name}>
+                                    <TableCell component="th" scope="row">
+                                        {row.name}
+                                    </TableCell>
+                                    <TableCell align="right">{row.data}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                )}
             </Grid>
 
             <Grid item xs={12} sm={12} alignContent="flex-start">

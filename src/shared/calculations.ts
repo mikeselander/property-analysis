@@ -1,4 +1,8 @@
-import { DEFAULT_MORTGAGE_YEARS, AVERAGE_PMI_PERCENT } from './constants';
+import {
+    AVERAGE_PMI_PERCENT,
+    DEFAULT_MORTGAGE_YEARS,
+    DESIRED_MONTHLY_CASHFLOW,
+} from './constants';
 
 /**
  * Calculate Principal and Interest per month.
@@ -133,6 +137,22 @@ export const calculateMoneyDown = ( purchasePrice: number, percentDown: number, 
  */
 export const calculatePrincipal = ( purchasePrice: number, percentDown: number ) => {
     return purchasePrice - (convertPercentInteger(percentDown) * purchasePrice);
+};
+
+/**
+ * 
+ * @param monthlyMortgagePayment
+ * @param hoa
+ * @param capEx
+ * @param maintenance
+ * @param vacancy
+ * @param propertyManagement
+ */
+export const calculateToCashflowGoalByRent = (monthlyMortgagePayment: number, hoa: number, capEx: number, maintenance: number, vacancy: number, propertyManagement: number): number => {
+    const upper = monthlyMortgagePayment + hoa + DESIRED_MONTHLY_CASHFLOW;
+    const lower = 1 - (vacancy + capEx + maintenance + propertyManagement) / 100;
+
+    return upper / lower;
 };
 
 /**
