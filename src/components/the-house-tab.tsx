@@ -70,6 +70,7 @@ const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handl
                     >
                         <MenuItem value='rental'>20% Down Mortgage</MenuItem>
                         <MenuItem value='house-hack'>House Hack (5% down + PMI)</MenuItem>
+                        <MenuItem value='cash'>All Cash</MenuItem>
                     </Select>
                 </FormControl>
             </Grid>

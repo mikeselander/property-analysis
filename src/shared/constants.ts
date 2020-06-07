@@ -100,4 +100,8 @@ export const LOAN_TYPE_CONFIG: LoanTypeConfig = {
         percentDown: 5,
         pmi: true,
     },
+    'cash': {
+        percentDown: 100,
+        pmi: false,
+    },
 };
