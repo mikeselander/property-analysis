@@ -24,6 +24,8 @@ import {
     calculateYearlyTaxes,
     calculateMonthlyPayment,
     calculateToCashflowGoalByRent,
+    calculateYearlyDepreciationWriteOff,
+    calculateTaxDeductions,
 } from '../shared/calculations';
 import Typography from "@material-ui/core/Typography";
 
@@ -83,6 +85,7 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
     const yesIcon = <CheckCircleOutlineIcon fontSize="small" color="action" />;
 
     const [showMore, setShowMore] = React.useState(false);
+    const [showTax, setShowTax] = React.useState(false);
 
     const mainRows = [
         {
@@ -138,6 +141,22 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
             name: 'Management',
             data: formatter.format((management/100) * monthlyRent),
         },
+    ];
+
+    const taxRows = [
+        {
+            name: 'Yearly Depreciation',
+            data: formatter.format( calculateYearlyDepreciationWriteOff( price ) ),
+        },
+        {
+            // Interest + Management Fees + Property Taxes + HOA
+            name: 'Deductions',
+            data: formatter.format( calculateTaxDeductions( price, percentDown, interestRate, management, monthlyRent, monthlyTaxes, hoa ) ),
+        },
+        {
+            name: 'Yearly Income',
+            data: formatter.format( monthlyRent * 12 )
+        }
     ];
 
     const toCashflowRows = [
@@ -200,6 +219,27 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
                 { showMore && ( <Table aria-label="simple table">
                     <TableBody>
                         {individualRows.map(row => (
+                            <TableRow key={row.name}>
+                                <TableCell component="th" scope="row">
+                                    {row.name}
+                                </TableCell>
+                                <TableCell align="right">
+                                    {row.data}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table> ) }
+            </Grid>
+
+            <Grid item xs={12} sm={12} alignContent="flex-start">
+                <Grid container justify="space-between" onClick={ () => setShowTax( ! showTax ) }>
+                    <Typography variant="h6">Tax Details</Typography>
+                    <ExpandMoreIcon color="action" />
+                </Grid>
+                { showTax && ( <Table aria-label="simple table">
+                    <TableBody>
+                        {taxRows.map(row => (
                             <TableRow key={row.name}>
                                 <TableCell component="th" scope="row">
                                     {row.name}

@@ -2,6 +2,7 @@ import {
     AVERAGE_PMI_PERCENT,
     DEFAULT_MORTGAGE_YEARS,
     DESIRED_MONTHLY_CASHFLOW,
+    DEFAULT_BASIS,
 } from './constants';
 
 /**
@@ -76,7 +77,7 @@ export const calculateYearlyTaxes = ( purchasePrice: number, taxRate: number ) =
  * @returns {number}
  */
 export const calculateCapRate = ( moneyDown: number, monthlyCashFlow: number ) => {
-    return Math.round( ((monthlyCashFlow * 12) / moneyDown)  * 100 );
+    return Math.round( ((monthlyCashFlow * 12) / moneyDown) * 100 );
 };
 
 /**
@@ -85,8 +86,6 @@ export const calculateCapRate = ( moneyDown: number, monthlyCashFlow: number ) =
  * @param mortgagePayment
  * @param fixedExpenses
  * @param monthlyRent
- * @param monthlyTaxes
- * @param monthlyInsurance
  * @returns {number}
  */
 export const calculateMonthlyCashFlow = ( mortgagePayment: number, fixedExpenses: number, monthlyRent: number ) => {
@@ -154,6 +153,72 @@ export const calculateToCashflowGoalByRent = (monthlyMortgagePayment: number, ho
 
     return upper / lower;
 };
+
+/**
+ *
+ * @param purchasePrice
+ * @param basis
+ */
+export const calculateYearlyDepreciationWriteOff = ( purchasePrice: number, basis: number = DEFAULT_BASIS ) : number => {
+    // Yearly depreciation rate over 27.5 yrs = 3.636%
+    return ( purchasePrice * basis ) * 0.03636;
+}
+
+/**
+ *
+ * @todo:: this is quit un-performant as we have to run through all months in a loan twice as it is.
+ *
+ * @param purchasePrice
+ * @param percentDown
+ * @param interestRate
+ */
+export const calculateTotalLoanInterest = ( purchasePrice: number, percentDown: number, interestRate: number ) : number => {
+    const amortization = getAmortizationTable( purchasePrice, percentDown, interestRate );
+
+    return amortization.reduce( ( accumulator: number, currentMonth  ) : number => {
+        return accumulator + currentMonth.interest;
+    }, 0 )
+}
+
+interface AmortizationRow {
+    interest: number;
+    principal: number;
+}
+
+/**
+ *
+ * @param purchasePrice
+ * @param percentDown
+ * @param interestRate
+ */
+export const getAmortizationTable = (purchasePrice: number, percentDown: number, interestRate: number ): AmortizationRow[] => {
+    let totalPrinciple = purchasePrice - ( purchasePrice * convertPercentInteger( percentDown ) );
+    const monthlyInterestFloat = convertPercentInteger(interestRate) / 12;
+    const totalPayment = calculateMonthlyPandI( purchasePrice, percentDown, interestRate );
+
+    const amortization = [];
+    const totalCycles = 12 * DEFAULT_MORTGAGE_YEARS;
+    for ( let i=0; i <= totalCycles; i++ ) {
+        const currentMonthInterest = totalPrinciple * monthlyInterestFloat;
+        const currentMonthPrinciple = totalPayment - currentMonthInterest;
+
+        amortization.push( {
+            interest: currentMonthInterest,
+            principal: currentMonthPrinciple,
+        })
+
+        totalPrinciple -= currentMonthPrinciple;
+    }
+
+    return amortization;
+}
+
+export const calculateTaxDeductions = ( price: number, percentDown: number, interestRate: number, management: number, monthlyRent: number, monthlyTaxes: number, hoa: number ) : number => {
+    return ( calculateTotalLoanInterest( price, percentDown, interestRate ) / DEFAULT_MORTGAGE_YEARS )
+    + ( (management/100) * monthlyRent ) * 12
+    + monthlyTaxes * 12
+    + hoa * 12;
+}
 
 /**
  *

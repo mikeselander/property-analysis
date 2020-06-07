@@ -33,6 +33,16 @@ export const STARTING_INTEREST_RATE: number = 4.0;
  */
 export const AVERAGE_PMI_PERCENT: number = 0.005;
 
+
+/**
+ * Default basis for the dpreciation writeoff.
+ *
+ * Totally made up number, will eventually add a field for this.
+ *
+ * @type {number}
+ */
+export const DEFAULT_BASIS: number = 0.90;
+
 /**
  *
  */
