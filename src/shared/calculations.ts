@@ -210,6 +210,8 @@ export const getAmortizationTable = (purchasePrice: number, percentDown: number,
         totalPrinciple -= currentMonthPrinciple;
     }
 
+    console.table( amortization );
+
     return amortization;
 }
 

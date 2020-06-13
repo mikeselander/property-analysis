@@ -86,6 +86,11 @@ export const CITY_DATA: CityData = {
         properName: "Clayton, MO",
         taxRate: 1.409,
         vacancy: 5.31,
+    },
+    'kansas-city': {
+        properName: 'Kansas City, MO',
+        taxRate: 1.376,
+        vacancy: 4.7,
     }
 };
 
