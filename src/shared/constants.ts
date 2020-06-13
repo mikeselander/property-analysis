@@ -91,6 +91,7 @@ export const CITY_DATA: CityData = {
 
 interface LoanTypeConfig {
     [key: string]: {
+        properName: string;
         percentDown: number;
         pmi: boolean;
     }
@@ -103,15 +104,23 @@ interface LoanTypeConfig {
  */
 export const LOAN_TYPE_CONFIG: LoanTypeConfig = {
     'rental': {
+        properName: '20% Down Mortgage',
         percentDown: 20,
         pmi: false,
     },
     'house-hack': {
+        properName: 'House Hack (5% down + PMI)',
         percentDown: 5,
         pmi: true,
     },
     'cash': {
+        properName: 'All Cash',
         percentDown: 100,
+        pmi: false,
+    },
+    'seller-financing': {
+        properName: 'Seller Financing',
+        percentDown: 0,
         pmi: false,
     },
 };

@@ -5,7 +5,10 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Select from "@material-ui/core/Select";
-import {CITY_DATA} from "../shared/constants";
+import {
+    CITY_DATA,
+    LOAN_TYPE_CONFIG
+} from "../shared/constants";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
@@ -68,9 +71,7 @@ const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handl
                             id: 'type',
                         }}
                     >
-                        <MenuItem value='rental'>20% Down Mortgage</MenuItem>
-                        <MenuItem value='house-hack'>House Hack (5% down + PMI)</MenuItem>
-                        <MenuItem value='cash'>All Cash</MenuItem>
+                        { Object.keys( LOAN_TYPE_CONFIG ).map( ( key: string ) => <MenuItem value={ key }>{ LOAN_TYPE_CONFIG[ key ].properName }</MenuItem> ) }
                     </Select>
                 </FormControl>
             </Grid>
@@ -147,6 +148,10 @@ const TheHouseTab = ({ handleChange, handleCityChange, handleSliderChange, handl
                     <Input
                         id="adornment-interestRate"
                         value={values.interestRate}
+                        inputProps={{
+                            max: 30,
+                            type: 'number',
+                        }}
                         // @ts-ignore
                         onChange={handleChange('interestRate')}
                         endAdornment={<InputAdornment position="end">%</InputAdornment>}
