@@ -39,11 +39,11 @@ function a11yProps(index: number) {
 
 const InputForm = ({copyValues, allValues: values}: {copyValues: (values: object) => void, allValues: ApplicationData }) => {
     const handleChange = ( prop: string ) => ( event: { target: HTMLInputElement; } ): void => {
-        if ( ! event?.target?.value ) {
-            return;
-        }
+        // @todo:: this really only works for numbers. Since we're mostly dealing with numbers, this should be OK,
+        // but we should still be smarter about it.
+        const value = event?.target?.value || 0;
 
-        copyValues({...values, [prop]: event.target.value});
+        copyValues({...values, [prop]: value});
     };
 
     const handleSliderChange = ( prop: string ) => (event: Event, newValue: string|number): void => {
@@ -51,7 +51,7 @@ const InputForm = ({copyValues, allValues: values}: {copyValues: (values: object
     };
 
     const handleToggleChange = ( prop: string ) => ( event: { target: HTMLInputElement; } ): void => {
-        if ( ! event?.target?.checked ) {
+        if ( event?.target?.checked === undefined ) {
             return;
         }
 
