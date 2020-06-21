@@ -166,7 +166,7 @@ export const calculateYearlyDepreciationWriteOff = ( purchasePrice: number, basi
 
 /**
  *
- * @todo:: this is quit un-performant as we have to run through all months in a loan twice as it is.
+ * @todo:: this is quite un-performant as we have to run through all months in a loan twice as it is.
  *
  * @param purchasePrice
  * @param percentDown
@@ -178,6 +178,23 @@ export const calculateTotalLoanInterest = ( purchasePrice: number, percentDown: 
     return amortization.reduce( ( accumulator: number, currentMonth  ) : number => {
         return accumulator + currentMonth.interest;
     }, 0 )
+}
+
+/**
+ *
+ * @param price
+ * @param percentDown
+ * @param interestRate
+ * @param management
+ * @param monthlyRent
+ * @param monthlyTaxes
+ * @param hoa
+ */
+export const calculateTaxDeductions = ( price: number, percentDown: number, interestRate: number, management: number, monthlyRent: number, monthlyTaxes: number, hoa: number ) : number => {
+    return ( calculateTotalLoanInterest( price, percentDown, interestRate ) / DEFAULT_MORTGAGE_YEARS )
+        + ( (management/100) * monthlyRent ) * 12
+        + monthlyTaxes * 12
+        + hoa * 12;
 }
 
 interface AmortizationRow {
@@ -215,16 +232,9 @@ export const getAmortizationTable = (purchasePrice: number, percentDown: number,
     return amortization;
 }
 
-export const calculateTaxDeductions = ( price: number, percentDown: number, interestRate: number, management: number, monthlyRent: number, monthlyTaxes: number, hoa: number ) : number => {
-    return ( calculateTotalLoanInterest( price, percentDown, interestRate ) / DEFAULT_MORTGAGE_YEARS )
-    + ( (management/100) * monthlyRent ) * 12
-    + monthlyTaxes * 12
-    + hoa * 12;
-}
-
 /**
  *
  * @param percentInteger
  * @returns {number}
  */
-const convertPercentInteger = ( percentInteger: number ) => percentInteger / 100;
+export const convertPercentInteger = ( percentInteger: number ) => percentInteger / 100;
