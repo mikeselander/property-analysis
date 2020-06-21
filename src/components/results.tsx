@@ -33,9 +33,7 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
 
     const {
         capEx,
-        hoa,
         interestRate,
-        insuranceCost,
         maintenance,
         management,
         percentDown,
@@ -46,21 +44,26 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
 
     let {
         closingCosts,
+        hoa,
+        insuranceCost,
         monthlyRent,
         price,
         repairCosts,
     } = allValues;
+
+    // @todo:: there's certainly a better way to do this.
+    closingCosts  = Number(closingCosts);
+    hoa           = Number(hoa);
+    insuranceCost = Number(insuranceCost);
+    monthlyRent   = Number(monthlyRent);
+    price         = Number(price);
+    repairCosts   = Number(repairCosts);
 
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 2
     });
-
-    monthlyRent = Number(monthlyRent);
-    price       = Number(price);
-    repairCosts = Number(repairCosts);
-    closingCosts = Number(closingCosts);
 
     const monthlyPandI     = calculateMonthlyPandI(price, percentDown, interestRate);
     const yearlyTaxes      = calculateYearlyTaxes(price, taxRate);
