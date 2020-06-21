@@ -24,7 +24,7 @@ export const DESIRED_MONTHLY_CASHFLOW: number = 200;
  *
  * @type {number}
  */
-export const STARTING_INTEREST_RATE: number = 4.0;
+export const STARTING_INTEREST_RATE: number = 3.25;
 
 /**
  * Percent of PMI to work with for starters.
