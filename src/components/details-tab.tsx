@@ -37,7 +37,7 @@ const DetailsTab = ({ values }: { values: ApplicationData }) => {
             <Grid item sm={12}>
                 <Typography variant="h6">Deal Values</Typography>
 
-                <Table>
+                <Table stickyHeader>
                     <TableHead>
                         <TableRow>
                             <TableCell>Name</TableCell>
@@ -64,6 +64,7 @@ const DetailsTab = ({ values }: { values: ApplicationData }) => {
 
             <Grid item sm={12}>
                 <Typography variant="h6">Amortizaion Table</Typography>
+                
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow>

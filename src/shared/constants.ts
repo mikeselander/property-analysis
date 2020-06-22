@@ -67,6 +67,11 @@ export const CITY_DATA: CityData = {
         taxRate: 0.567,
         vacancy: 4.64,
     },
+    'timnath': {
+        properName: "Timnath",
+        taxRate: 0.720,
+        vacancy: 4.64,
+    },
     'loveland': {
         properName: "Loveland",
         taxRate: 0.567,
