@@ -214,7 +214,7 @@ export const getAmortizationTable = (purchasePrice: number, percentDown: number,
     const totalPayment = calculateMonthlyPandI( purchasePrice, percentDown, interestRate );
 
     const amortization = [];
-    const totalCycles = 12 * DEFAULT_MORTGAGE_YEARS;
+    const totalCycles = ( 12 * DEFAULT_MORTGAGE_YEARS ) - 1;
     for ( let i=0; i <= totalCycles; i++ ) {
         const currentMonthInterest = totalPrinciple * monthlyInterestFloat;
         const currentMonthPrinciple = totalPayment - currentMonthInterest;
@@ -226,8 +226,6 @@ export const getAmortizationTable = (purchasePrice: number, percentDown: number,
 
         totalPrinciple -= currentMonthPrinciple;
     }
-
-    console.table( amortization );
 
     return amortization;
 }

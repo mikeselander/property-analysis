@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography'
 
 import OngoingCostsTab from './ongoing-costs-tab';
 import TheHouseTab from './the-house-tab';
+import DetailsTab from './details-tab';
 
 import { CITY_DATA, LOAN_TYPE_CONFIG } from "../shared/constants";
 import { ApplicationData } from './App';
@@ -108,6 +109,7 @@ const InputForm = ({copyValues, allValues: values}: {copyValues: (values: object
                 >
                     <Tab label="The Property" {...a11yProps(0)} />
                     <Tab label="Ongoing costs" {...a11yProps(1)} />
+                    <Tab label="Details" {...a11yProps(2)} />
                 </Tabs>
             </AppBar>
 
@@ -131,6 +133,10 @@ const InputForm = ({copyValues, allValues: values}: {copyValues: (values: object
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     <OngoingCostsTab handleChange={handleChange} values={values} />
+                </TabPanel>
+
+                <TabPanel value={value} index={2}>
+                    <DetailsTab values={values} />
                 </TabPanel>
             </Grid>
         </>

@@ -185,7 +185,7 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
             }
         >
             <Grid item xs={12} sm={12} alignContent="flex-start">
-                <Table  aria-label="simple table">
+                <Table aria-label="simple table">
                     <TableBody>
                         {mainRows.map(row => (
                             <TableRow key={row.name}>

@@ -65,8 +65,6 @@ const App = () => {
         }
     );
 
-    console.table( state );
-
     return (
         <div className="App">
             <ThemeProvider theme={ theme }>
