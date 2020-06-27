@@ -17,6 +17,7 @@ import { ApplicationData } from './App';
 import {
     calculateCapRate,
     calculateMonthlyCashFlow,
+    calculateGrossMonthlyCashFlow,
     calculateMoneyDown,
     calculateMonthlyFixedExpenses,
     calculateMonthlyInsurance,
@@ -73,6 +74,7 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
 
     const fixedExpenses    = calculateMonthlyFixedExpenses(monthlyRent, vacancy, maintenance, capEx, management, hoa);
     const cashFlow         = calculateMonthlyCashFlow(monthlyPayment, fixedExpenses, monthlyRent);
+    const grossCashFlow    = calculateGrossMonthlyCashFlow(cashFlow, monthlyRent, vacancy, maintenance, capEx);
     const moneyDown        = calculateMoneyDown(price, percentDown, closingCosts, repairCosts);
     const capRate          = calculateCapRate(moneyDown, cashFlow);
 
@@ -104,7 +106,11 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
             data: formatter.format(fixedExpenses),
         },
         {
-            name: 'Cash Flow',
+            name: 'Gross Cash Flow',
+            data: formatter.format(grossCashFlow),
+        },
+        {
+            name: 'Net Cash Flow',
             data: formatter.format(cashFlow),
             icon: doesCashFlow ? yesIcon : noIcon,
         },

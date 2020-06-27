@@ -81,6 +81,23 @@ export const calculateCapRate = ( moneyDown: number, monthlyCashFlow: number ) =
 };
 
 /**
+ * Calculate the monthly incoming cash, before putting money aside into sinking funds.
+ *
+ * @param cashFlow
+ * @param monthlyRent
+ * @param vacancy
+ * @param maintenance
+ * @param capEx
+ * @returns {number}
+ */
+export const calculateGrossMonthlyCashFlow = ( cashFlow: number, monthlyRent: number, vacancy: number, maintenance: number, capEx: number ) => {
+    return cashFlow
+        + (monthlyRent * convertPercentInteger(vacancy))
+        + (monthlyRent * convertPercentInteger(maintenance))
+        + (monthlyRent * convertPercentInteger(capEx));
+};
+
+/**
  * Calculate the monthly cash flow
  *
  * @param mortgagePayment
