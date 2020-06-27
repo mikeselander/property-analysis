@@ -6,6 +6,7 @@ import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
 import { ApplicationData } from './App';
+import { convertPercentInteger } from "../shared/calculations";
 
 interface HouseTabProps {
     handleChange: (value: any) => void;
@@ -13,6 +14,8 @@ interface HouseTabProps {
 }
 
 const OngoingCostsTab = ({ handleChange, values }: HouseTabProps) => {
+    const calculateAmount = ( value: string|number ) => convertPercentInteger( Number( value ) ) * values.monthlyRent;
+
     return (
         <Grid
             container
@@ -22,7 +25,7 @@ const OngoingCostsTab = ({ handleChange, values }: HouseTabProps) => {
         >
             <Grid item xs={5} sm={6}>
                 <FormControl>
-                    <InputLabel htmlFor="adornment-vacancy">Vacancy Rate</InputLabel>
+                    <InputLabel htmlFor="adornment-vacancy">Vacancy Rate (${ calculateAmount( values.vacancy ) })</InputLabel>
                     <Input
                         id="adornment-vacancy"
                         value={values.vacancy}
@@ -36,7 +39,7 @@ const OngoingCostsTab = ({ handleChange, values }: HouseTabProps) => {
 
             <Grid item xs={5} sm={6}>
                 <FormControl>
-                    <InputLabel htmlFor="adornment-maintenance">Maintenance</InputLabel>
+                    <InputLabel htmlFor="adornment-maintenance">Maintenance (${ calculateAmount( values.maintenance ) })</InputLabel>
                     <Input
                         id="adornment-maintenance"
                         value={values.maintenance}
@@ -50,7 +53,7 @@ const OngoingCostsTab = ({ handleChange, values }: HouseTabProps) => {
 
             <Grid item xs={5} sm={6}>
                 <FormControl>
-                    <InputLabel htmlFor="adornment-capEx">CapEx</InputLabel>
+                    <InputLabel htmlFor="adornment-capEx">CapEx (${ calculateAmount( values.capEx ) })</InputLabel>
                     <Input
                         id="adornment-capEx"
                         value={values.capEx}
@@ -64,7 +67,7 @@ const OngoingCostsTab = ({ handleChange, values }: HouseTabProps) => {
 
             <Grid item xs={5} sm={6}>
                 <FormControl>
-                    <InputLabel htmlFor="adornment-management">Management</InputLabel>
+                    <InputLabel htmlFor="adornment-management">Management (${ calculateAmount( values.management ) })</InputLabel>
                     <Input
                         id="adornment-management"
                         value={values.management}
