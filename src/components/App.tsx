@@ -9,11 +9,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import theme from '../theme';
 import useLocalStorage from '../shared/use-local-storage';
 
-import {
-    CITY_DATA,
-    DEFAULT_CITY,
-    STARTING_INTEREST_RATE ,
-} from "../shared/constants";
+import { INITIAL_STATE } from "../shared/constants";
 
 export interface ApplicationData {
     capEx: number;
@@ -30,7 +26,7 @@ export interface ApplicationData {
     price: number | string;
     repairCosts: number;
     taxRate: number;
-    typeOfRental: 'rental'|'house-hack';
+    typeOfRental: string;
     vacancy: number;
 }
 
@@ -45,24 +41,7 @@ export interface ApplicationData {
 const App = () => {
     const [ state, copyValues ] = useLocalStorage(
         'prop-data',
-        {
-            capEx: 5,
-            city: DEFAULT_CITY,
-            closingCosts: 3700,
-            hoa: 0,
-            insuranceCost: 50,
-            interestRate: STARTING_INTEREST_RATE,
-            maintenance: 5,
-            management: 11,
-            monthlyRent: 1000,
-            percentDown: 20,
-            pmi: false,
-            price: 100000,
-            repairCosts: 0,
-            taxRate: CITY_DATA[DEFAULT_CITY].taxRate,
-            typeOfRental: 'rental',
-            vacancy: CITY_DATA[DEFAULT_CITY].vacancy,
-        }
+        INITIAL_STATE
     );
 
     return (

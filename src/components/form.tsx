@@ -132,11 +132,11 @@ const InputForm = ({copyValues, allValues: values}: {copyValues: (values: object
                     />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <OngoingCostsTab handleChange={handleChange} values={values} />
+                    <OngoingCostsTab handleChange={handleChange} values={ values } />
                 </TabPanel>
 
                 <TabPanel value={value} index={2}>
-                    <DetailsTab values={values} />
+                    <DetailsTab values={ values } copyValues={ copyValues } />
                 </TabPanel>
             </Grid>
         </>

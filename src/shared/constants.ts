@@ -134,3 +134,22 @@ export const LOAN_TYPE_CONFIG: LoanTypeConfig = {
         pmi: false,
     },
 };
+
+export const INITIAL_STATE = {
+    capEx: 5,
+    city: DEFAULT_CITY,
+    closingCosts: 3700,
+    hoa: 0,
+    insuranceCost: 50,
+    interestRate: STARTING_INTEREST_RATE,
+    maintenance: 5,
+    management: 11,
+    monthlyRent: 1000,
+    percentDown: 20,
+    pmi: false,
+    price: 100000,
+    repairCosts: 0,
+    taxRate: CITY_DATA[DEFAULT_CITY].taxRate,
+    typeOfRental: 'rental',
+    vacancy: CITY_DATA[DEFAULT_CITY].vacancy,
+}

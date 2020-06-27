@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,10 +9,12 @@ import TableRow from '@material-ui/core/TableRow';
 
 import { getAmortizationTable } from '../shared/calculations';
 
+import { INITIAL_STATE } from '../shared/constants';
+
 import { ApplicationData } from './App';
 import Typography from "@material-ui/core/Typography";
 
-const DetailsTab = ({ values }: { values: ApplicationData }) => {
+const DetailsTab = ({ values, copyValues }: { values: ApplicationData, copyValues: ( state: object ) => void }) => {
     const {
         price,
         percentDown,
@@ -34,6 +37,12 @@ const DetailsTab = ({ values }: { values: ApplicationData }) => {
             alignItems="flex-start"
             spacing={3}
         >
+            <Grid item sm={12}>
+                <Button variant="contained" color="secondary" onClick={ () => copyValues( INITIAL_STATE ) }>
+                    Reset to Default
+                </Button>
+            </Grid>
+
             <Grid item sm={12}>
                 <Typography variant="h6">Deal Values</Typography>
 
@@ -64,7 +73,7 @@ const DetailsTab = ({ values }: { values: ApplicationData }) => {
 
             <Grid item sm={12}>
                 <Typography variant="h6">Amortizaion Table</Typography>
-                
+
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow>
