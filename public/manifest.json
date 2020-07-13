@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Real Deal Checker",
+  "name": "Quickly and easily checks rental deal numbers",
   "icons": [
     {
       "src": "favicon.ico",
