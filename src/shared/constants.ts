@@ -64,7 +64,7 @@ interface CityData {
 export const CITY_DATA: CityData = {
     'foco': {
         properName: "Fort Collins",
-        taxRate: 0.567,
+        taxRate: 0.715,
         vacancy: 4.64,
     },
     'timnath': {

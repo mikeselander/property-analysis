@@ -33,17 +33,16 @@ const DetailsTab = ({ values, copyValues }: { values: ApplicationData, copyValue
     return (
         <Grid
             container
-            justify="space-between"
             alignItems="flex-start"
             spacing={3}
         >
-            <Grid item sm={12}>
+            <Grid item xs={12}>
                 <Button variant="contained" color="secondary" onClick={ () => copyValues( INITIAL_STATE ) }>
                     Reset to Default
                 </Button>
             </Grid>
 
-            <Grid item sm={12}>
+            <Grid item xs={12}>
                 <Typography variant="h6">Deal Values</Typography>
 
                 <Table stickyHeader>
@@ -71,7 +70,7 @@ const DetailsTab = ({ values, copyValues }: { values: ApplicationData, copyValue
                 </Table>
             </Grid>
 
-            <Grid item sm={12}>
+            <Grid item xs={12}>
                 <Typography variant="h6">Amortizaion Table</Typography>
 
                 <Table stickyHeader>
