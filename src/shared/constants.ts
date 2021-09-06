@@ -6,13 +6,6 @@
 export const DEFAULT_MORTGAGE_YEARS: number = 30;
 
 /**
- * Cap rate I want to hit.
- *
- * @type {number}
- */
-export const DESIRED_CAP_RATE: number = 7;
-
-/**
  * Per-unit cash rate.
  *
  * @type {number}
@@ -24,7 +17,7 @@ export const DESIRED_MONTHLY_CASHFLOW: number = 200;
  *
  * @type {number}
  */
-export const STARTING_INTEREST_RATE: number = 3.25;
+export const STARTING_INTEREST_RATE: number = 3.75;
 
 /**
  * Percent of PMI to work with for starters.
@@ -35,7 +28,7 @@ export const AVERAGE_PMI_PERCENT: number = 0.005;
 
 
 /**
- * Default basis for the dpreciation writeoff.
+ * Default basis for the depreciation writeoff.
  *
  * Totally made up number, will eventually add a field for this.
  *
@@ -87,11 +80,6 @@ export const CITY_DATA: CityData = {
         taxRate: 0.656,
         vacancy: 4,
     },
-    'clayton': {
-        properName: "Clayton, MO",
-        taxRate: 1.409,
-        vacancy: 5.31,
-    },
     'kansas-city': {
         properName: 'Kansas City, MO',
         taxRate: 1.376,
@@ -113,13 +101,13 @@ interface LoanTypeConfig {
  * @type {Object}
  */
 export const LOAN_TYPE_CONFIG: LoanTypeConfig = {
-    'rental': {
+    'conventional': {
         properName: '20% Down Mortgage',
         percentDown: 20,
         pmi: false,
     },
-    'house-hack': {
-        properName: 'House Hack (5% down + PMI)',
+    'live-in': {
+        properName: 'Live-in (5% down + PMI)',
         percentDown: 5,
         pmi: true,
     },
@@ -150,6 +138,6 @@ export const INITIAL_STATE = {
     price: 100000,
     repairCosts: 0,
     taxRate: CITY_DATA[DEFAULT_CITY].taxRate,
-    typeOfRental: 'rental',
+    typeOfRental: 'conventional',
     vacancy: CITY_DATA[DEFAULT_CITY].vacancy,
 }

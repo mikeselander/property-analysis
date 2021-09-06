@@ -7,11 +7,9 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import NotInterestedIcon from '@material-ui/icons/NotInterested';
 
-import { DESIRED_CAP_RATE, DESIRED_MONTHLY_CASHFLOW } from "../shared/constants";
+import { DESIRED_MONTHLY_CASHFLOW } from "../shared/constants";
 import { ApplicationData } from './App';
 
 import {
@@ -79,15 +77,11 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
     const capRate          = calculateCapRate(moneyDown, cashFlow);
 
     const doesCashFlow = (DESIRED_MONTHLY_CASHFLOW < cashFlow);
-    const doesCapRate  = (DESIRED_CAP_RATE < capRate);
 
     let byRentIncrease: number;
     if (! doesCashFlow) {
         byRentIncrease = calculateToCashflowGoalByRent(monthlyPayment, hoa, capEx, maintenance, vacancy, management);
     }
-
-    const noIcon  = <NotInterestedIcon fontSize="small" color="error" />;
-    const yesIcon = <CheckCircleOutlineIcon fontSize="small" color="action" />;
 
     const [showMore, setShowMore] = React.useState(false);
     const [showTax, setShowTax] = React.useState(false);
@@ -112,12 +106,10 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
         {
             name: 'Net Cash Flow',
             data: formatter.format(cashFlow),
-            icon: doesCashFlow ? yesIcon : noIcon,
         },
         {
             name: 'Cap Rate',
             data: `${capRate}%`,
-            icon: doesCapRate ? yesIcon : noIcon,
         },
     ];
 
@@ -170,11 +162,7 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
 
     const toCashflowRows = [
         {
-            name: 'By Purchase Price',
-            data: 0,
-        },
-        {
-            name: 'By Rent',
+            name: 'Rent Necessary to Cashflow',
             // @ts-ignore
             data: formatter.format(byRentIncrease),
         },
@@ -198,7 +186,7 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
                                 <TableCell component="th" scope="row">
                                     {row.name}
                                 </TableCell>
-                                <TableCell align="right">{row.data} {row.icon ? row.icon : null}</TableCell>
+                                <TableCell align="right">{row.data}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
