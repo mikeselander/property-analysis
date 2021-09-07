@@ -29,16 +29,16 @@ export interface DealData {
 }
 
 export const getDealData = ( allData: ApplicationData ): DealData => {
-    const capEx = (allData.capEx/100) * allData.monthlyRent,
+    const capEx = convertPercentInteger( allData.capEx ) * allData.monthlyRent,
         grossRent = Number( allData.monthlyRent ),
         hoa = Number(allData.hoa),
         insurance = Number( allData.insuranceCost ),
-        maintenance = (allData.maintenance/100) * allData.monthlyRent,
+        maintenance = convertPercentInteger( allData.maintenance ) * allData.monthlyRent,
         pAndI = calculateMonthlyPandI( Number( allData.price ), allData.percentDown, allData.interestRate ),
         pmi = allData.pmi ? calculateMonthlyPmi( Number( allData.price ), allData.percentDown ) : 0,
-        propertyManagement = (allData.management/100) * allData.monthlyRent,
+        propertyManagement = convertPercentInteger( allData.management ) * allData.monthlyRent,
         propertyTaxes = calculateMonthlyTaxes( Number(allData.price), allData.taxRate ),
-        vacancy = (allData.vacancy/100) * allData.monthlyRent;
+        vacancy = convertPercentInteger( allData.vacancy ) * allData.monthlyRent;
 
     const mortgagePayment = calculateMonthlyPayment( pAndI, insurance, pmi, propertyTaxes );
 
