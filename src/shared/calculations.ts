@@ -127,20 +127,14 @@ export const calculateMonthlyPayment = ( pAndI: number, insurance: number, pmi: 
 /**
  * Calculate all monthly non-mortgage costs.
  *
- * @param monthlyRent
- * @param vacancy
- * @param maintenance
- * @param capEx
- * @param management
- * @param hoa
  * @returns {number}
  */
-export const calculateMonthlyFixedExpenses = ( monthlyRent: number, vacancy: number, maintenance: number, capEx: number, management: number, hoa: number ) => {
-    return (monthlyRent * convertPercentInteger(vacancy))
-        + (monthlyRent * convertPercentInteger(maintenance))
-        + (monthlyRent * convertPercentInteger(capEx))
-        + (monthlyRent * convertPercentInteger(management))
-        + hoa
+export const calculateMonthlyFixedExpenses = ( dealData: DealData ) => {
+    return dealData.vacancy.monthly
+        + dealData.maintenance.monthly
+        + dealData.capEx.monthly
+        + dealData.propertyManagement.monthly
+        + dealData.hoa.monthly
 };
 
 const calculateMonthlyTaxes = ( purchasePrice: number, taxRate: number ) => {
@@ -168,11 +162,11 @@ export const calculateCapRate = ( moneyDown: number, monthlyCashFlow: number ) =
  * @param capEx
  * @returns {number}
  */
-export const calculateGrossMonthlyCashFlow = ( cashFlow: number, monthlyRent: number, vacancy: number, maintenance: number, capEx: number ) => {
+export const calculateGrossMonthlyCashFlow = ( cashFlow: number, vacancy: number, maintenance: number, capEx: number ) => {
     return cashFlow
-        + (monthlyRent * convertPercentInteger(vacancy))
-        + (monthlyRent * convertPercentInteger(maintenance))
-        + (monthlyRent * convertPercentInteger(capEx));
+        + vacancy
+        + maintenance
+        + capEx
 };
 
 /**

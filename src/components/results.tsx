@@ -20,7 +20,8 @@ import {
     calculateMonthlyFixedExpenses,
     calculateToCashflowGoalByRent,
     calculateYearlyDepreciationWriteOff,
-    calculateTaxDeductions, getDealData,
+    calculateTaxDeductions,
+    getDealData,
 } from '../shared/calculations';
 import Typography from "@material-ui/core/Typography";
 
@@ -54,9 +55,9 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
 
     const dealData = getDealData( allValues );
 
-    const fixedExpenses    = calculateMonthlyFixedExpenses(dealData.grossRent.monthly, vacancy, maintenance, capEx, management, dealData.hoa.monthly);
+    const fixedExpenses    = calculateMonthlyFixedExpenses(dealData);
     const cashFlow         = calculateMonthlyCashFlow(dealData.mortgagePayment.monthly, fixedExpenses, dealData.grossRent.monthly);
-    const grossCashFlow    = calculateGrossMonthlyCashFlow(cashFlow, dealData.grossRent.monthly, vacancy, maintenance, capEx);
+    const grossCashFlow    = calculateGrossMonthlyCashFlow(cashFlow, dealData.vacancy.monthly, dealData.maintenance.monthly, dealData.capEx.monthly);
     const moneyDown        = calculateMoneyDown(price, percentDown, closingCosts, repairCosts);
     const capRate          = calculateCapRate(moneyDown, cashFlow);
 
@@ -70,7 +71,7 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
             capEx,
             maintenance,
             vacancy,
-            management
+            management,
         );
     }
 
@@ -162,7 +163,7 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
                     price,
                     percentDown,
                     interestRate,
-                    management,
+                    dealData.propertyManagement.monthly,
                     dealData.grossRent.monthly,
                     dealData.propertyTaxes.monthly,
                     dealData.hoa.monthly
