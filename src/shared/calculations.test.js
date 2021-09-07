@@ -2,7 +2,6 @@ import {
     calculateMonthlyPandI,
     calculateMonthlyPayment,
     calculateMonthlyFixedExpenses,
-    calculateYearlyTaxes,
     calculateCapRate,
     calculateMonthlyCashFlow,
     calculateMonthlyInsurance,
@@ -29,11 +28,6 @@ describe( 'Calculations Simple Unit Tests', () => {
     it( 'Calculates Monthly Expenses', () => {
         expect( calculateMonthlyFixedExpenses( 1000, 5, 5, 5, 5, 50 ) )
             .toEqual( 250 );
-    } );
-
-    it( 'Calculates Yearly Taxes', () => {
-        expect( calculateYearlyTaxes( 100000, .67 ) )
-            .toEqual( 670 );
     } );
 
     it( 'Calculates a Cap Rate', () => {

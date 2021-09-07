@@ -1,9 +1,94 @@
+import {ApplicationData} from "../components/App";
 import {
     AVERAGE_PMI_PERCENT,
     DEFAULT_MORTGAGE_YEARS,
     DESIRED_MONTHLY_CASHFLOW,
     DEFAULT_BASIS,
 } from './constants';
+
+interface DataPoint {
+    monthly: number;
+    yearly: number;
+}
+
+/**
+ * Type holding the monthly and yearly data about a deal.
+ */
+export interface DealData {
+    capEx: DataPoint;
+    grossRent: DataPoint;
+    hoa: DataPoint;
+    insurance: DataPoint;
+    maintenance: DataPoint;
+    mortgagePayment: DataPoint;
+    pmi: DataPoint;
+    principalAndInterest: DataPoint;
+    propertyManagement: DataPoint;
+    propertyTaxes: DataPoint;
+    vacancy: DataPoint;
+}
+
+export const getDealData = ( allData: ApplicationData ): DealData => {
+    const capEx = (allData.capEx/100) * allData.monthlyRent,
+        grossRent = Number( allData.monthlyRent ),
+        hoa = Number(allData.hoa),
+        insurance = Number( allData.insuranceCost ),
+        maintenance = (allData.maintenance/100) * allData.monthlyRent,
+        pAndI = calculateMonthlyPandI( Number( allData.price ), allData.percentDown, allData.interestRate ),
+        pmi = allData.pmi ? calculateMonthlyPmi( Number( allData.price ), allData.percentDown ) : 0,
+        propertyManagement = (allData.management/100) * allData.monthlyRent,
+        propertyTaxes = calculateMonthlyTaxes( Number(allData.price), allData.taxRate ),
+        vacancy = (allData.vacancy/100) * allData.monthlyRent;
+
+    const mortgagePayment = calculateMonthlyPayment( pAndI, insurance, pmi, propertyTaxes );
+
+    return {
+        capEx: {
+            monthly: capEx,
+            yearly: capEx * 12,
+        },
+        grossRent: {
+            monthly: grossRent,
+            yearly: grossRent * 12,
+        },
+        hoa: {
+            monthly: hoa,
+            yearly: hoa * 12,
+        },
+        insurance: {
+            monthly: insurance,
+            yearly: insurance * 12,
+        },
+        maintenance: {
+            monthly:  maintenance,
+            yearly: maintenance * 12,
+        },
+        mortgagePayment: {
+            monthly: mortgagePayment,
+            yearly: mortgagePayment * 12,
+        },
+        pmi: {
+            monthly: pmi,
+            yearly: pmi * 12,
+        },
+        principalAndInterest: {
+            monthly: pAndI,
+            yearly: pAndI * 12,
+        },
+        propertyManagement: {
+            monthly: propertyManagement,
+            yearly: propertyManagement * 12,
+        },
+        propertyTaxes: {
+            monthly: propertyTaxes,
+            yearly: propertyTaxes * 12,
+        },
+        vacancy: {
+            monthly: vacancy,
+            yearly: vacancy * 12,
+        },
+    }
+}
 
 /**
  * Calculate Principal and Interest per month.
@@ -35,8 +120,8 @@ export const calculateMonthlyPandI = ( purchasePrice: number, percentDown: numbe
  * @param taxes
  * @returns {*}
  */
-export const calculateMonthlyPayment = ( pAndI: number, insurance: number, taxes: number ) => {
-    return pAndI + insurance + taxes;
+export const calculateMonthlyPayment = ( pAndI: number, insurance: number, pmi: number, taxes: number ) => {
+    return pAndI + insurance + pmi + taxes;
 };
 
 /**
@@ -58,16 +143,9 @@ export const calculateMonthlyFixedExpenses = ( monthlyRent: number, vacancy: num
         + hoa
 };
 
-/**
- * Calculate taxes for a whole year.
- *
- * @param purchasePrice
- * @param taxRate
- * @returns {number}
- */
-export const calculateYearlyTaxes = ( purchasePrice: number, taxRate: number ) => {
-    return purchasePrice * convertPercentInteger(taxRate);
-};
+const calculateMonthlyTaxes = ( purchasePrice: number, taxRate: number ) => {
+    return (purchasePrice * convertPercentInteger(taxRate)) / 12;
+}
 
 /**
  * Calculate the caprate for the money we've put down.

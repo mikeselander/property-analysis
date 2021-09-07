@@ -20,11 +20,10 @@ import {
     calculateMonthlyFixedExpenses,
     calculateMonthlyInsurance,
     calculateMonthlyPandI,
-    calculateYearlyTaxes,
     calculateMonthlyPayment,
     calculateToCashflowGoalByRent,
     calculateYearlyDepreciationWriteOff,
-    calculateTaxDeductions,
+    calculateTaxDeductions, getDealData,
 } from '../shared/calculations';
 import Typography from "@material-ui/core/Typography";
 
@@ -36,15 +35,12 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
         maintenance,
         management,
         percentDown,
-        pmi,
-        taxRate,
         vacancy,
     } = allValues;
 
     let {
         closingCosts,
         hoa,
-        insuranceCost,
         monthlyRent,
         price,
         repairCosts,
@@ -53,7 +49,6 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
     // @todo:: there's certainly a better way to do this.
     closingCosts  = Number(closingCosts);
     hoa           = Number(hoa);
-    insuranceCost = Number(insuranceCost);
     monthlyRent   = Number(monthlyRent);
     price         = Number(price);
     repairCosts   = Number(repairCosts);
@@ -64,14 +59,10 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
         minimumFractionDigits: 2
     });
 
-    const monthlyPandI     = calculateMonthlyPandI(price, percentDown, interestRate);
-    const yearlyTaxes      = calculateYearlyTaxes(price, taxRate);
-    const monthlyTaxes     = yearlyTaxes / 12;
-    const monthlyInsurance = calculateMonthlyInsurance(insuranceCost, pmi, price, percentDown);
-    const monthlyPayment   = calculateMonthlyPayment(monthlyPandI, monthlyInsurance, monthlyTaxes);
+    const dealData = getDealData( allValues );
 
     const fixedExpenses    = calculateMonthlyFixedExpenses(monthlyRent, vacancy, maintenance, capEx, management, hoa);
-    const cashFlow         = calculateMonthlyCashFlow(monthlyPayment, fixedExpenses, monthlyRent);
+    const cashFlow         = calculateMonthlyCashFlow(dealData.mortgagePayment.monthly, fixedExpenses, monthlyRent);
     const grossCashFlow    = calculateGrossMonthlyCashFlow(cashFlow, monthlyRent, vacancy, maintenance, capEx);
     const moneyDown        = calculateMoneyDown(price, percentDown, closingCosts, repairCosts);
     const capRate          = calculateCapRate(moneyDown, cashFlow);
@@ -80,7 +71,7 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
 
     let byRentIncrease: number;
     if (! doesCashFlow) {
-        byRentIncrease = calculateToCashflowGoalByRent(monthlyPayment, hoa, capEx, maintenance, vacancy, management);
+        byRentIncrease = calculateToCashflowGoalByRent(dealData.mortgagePayment.monthly, hoa, capEx, maintenance, vacancy, management);
     }
 
     const [showMore, setShowMore] = React.useState(false);
@@ -93,7 +84,7 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
         },
         {
             name: 'Monthly Payment',
-            data: formatter.format(monthlyPayment),
+            data: formatter.format(dealData.mortgagePayment.monthly),
         },
         {
             name: 'Fixed Expenses',
@@ -116,33 +107,47 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
     const individualRows = [
         {
             name: 'P and I',
-            data: formatter.format(monthlyPandI),
+            data: formatter.format(dealData.principalAndInterest.monthly),
         },
         {
             name: 'Taxes',
-            data: formatter.format(yearlyTaxes / 12),
+            data: formatter.format(dealData.propertyTaxes.monthly),
         },
         {
             name: 'Insurance',
-            data: formatter.format(monthlyInsurance),
+            data: formatter.format(dealData.insurance.monthly),
         },
         {
             name: 'Vacancy',
-            data: formatter.format((vacancy/100) * monthlyRent),
+            data: formatter.format(dealData.vacancy.monthly),
         },
         {
             name: 'Maintenance',
-            data: formatter.format((maintenance/100) * monthlyRent),
+            data: formatter.format(dealData.maintenance.monthly),
         },
         {
             name: 'CapEx',
-            data: formatter.format((capEx/100) * monthlyRent),
+            data: formatter.format(dealData.capEx.monthly),
         },
         {
             name: 'Management',
-            data: formatter.format((management/100) * monthlyRent),
+            data: formatter.format(dealData.propertyManagement.monthly),
         },
     ];
+
+    if ( dealData.hoa.monthly > 0 ) {
+        individualRows.push( {
+            name: 'HOA',
+            data: formatter.format(dealData.hoa.monthly),
+        }, )
+    }
+
+    if ( dealData.pmi.monthly > 0 ) {
+        individualRows.push( {
+            name: "Mortgage Insurance (PMI)",
+            data: formatter.format(dealData.pmi.monthly),
+        }, )
+    }
 
     const taxRows = [
         {
@@ -152,11 +157,11 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
         {
             // Interest + Management Fees + Property Taxes + HOA
             name: 'Deductions',
-            data: formatter.format( calculateTaxDeductions( price, percentDown, interestRate, management, monthlyRent, monthlyTaxes, hoa ) ),
+            data: formatter.format( calculateTaxDeductions( price, percentDown, interestRate, management, monthlyRent, dealData.propertyTaxes.monthly, hoa ) ),
         },
         {
-            name: 'Yearly Income',
-            data: formatter.format( monthlyRent * 12 )
+            name: 'Yearly Gross Income',
+            data: formatter.format( dealData.grossRent.yearly )
         }
     ];
 
@@ -210,7 +215,7 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
 
             <Grid item xs={12} sm={12} alignContent="flex-start">
                 <Grid container justify="space-between" onClick={ () => setShowMore( ! showMore ) }>
-                    <Typography variant="h6">Details</Typography>
+                    <Typography variant="h6">Expense Breakdown</Typography>
                     <ExpandMoreIcon color="action" />
                 </Grid>
                 { showMore && ( <Table aria-label="simple table">
