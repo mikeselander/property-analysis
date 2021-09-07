@@ -18,9 +18,6 @@ import {
     calculateGrossMonthlyCashFlow,
     calculateMoneyDown,
     calculateMonthlyFixedExpenses,
-    calculateMonthlyInsurance,
-    calculateMonthlyPandI,
-    calculateMonthlyPayment,
     calculateToCashflowGoalByRent,
     calculateYearlyDepreciationWriteOff,
     calculateTaxDeductions, getDealData,
@@ -40,16 +37,12 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
 
     let {
         closingCosts,
-        hoa,
-        monthlyRent,
         price,
         repairCosts,
     } = allValues;
 
     // @todo:: there's certainly a better way to do this.
     closingCosts  = Number(closingCosts);
-    hoa           = Number(hoa);
-    monthlyRent   = Number(monthlyRent);
     price         = Number(price);
     repairCosts   = Number(repairCosts);
 
@@ -61,9 +54,9 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
 
     const dealData = getDealData( allValues );
 
-    const fixedExpenses    = calculateMonthlyFixedExpenses(monthlyRent, vacancy, maintenance, capEx, management, hoa);
-    const cashFlow         = calculateMonthlyCashFlow(dealData.mortgagePayment.monthly, fixedExpenses, monthlyRent);
-    const grossCashFlow    = calculateGrossMonthlyCashFlow(cashFlow, monthlyRent, vacancy, maintenance, capEx);
+    const fixedExpenses    = calculateMonthlyFixedExpenses(dealData.grossRent.monthly, vacancy, maintenance, capEx, management, dealData.hoa.monthly);
+    const cashFlow         = calculateMonthlyCashFlow(dealData.mortgagePayment.monthly, fixedExpenses, dealData.grossRent.monthly);
+    const grossCashFlow    = calculateGrossMonthlyCashFlow(cashFlow, dealData.grossRent.monthly, vacancy, maintenance, capEx);
     const moneyDown        = calculateMoneyDown(price, percentDown, closingCosts, repairCosts);
     const capRate          = calculateCapRate(moneyDown, cashFlow);
 
@@ -71,7 +64,14 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
 
     let byRentIncrease: number;
     if (! doesCashFlow) {
-        byRentIncrease = calculateToCashflowGoalByRent(dealData.mortgagePayment.monthly, hoa, capEx, maintenance, vacancy, management);
+        byRentIncrease = calculateToCashflowGoalByRent(
+            dealData.mortgagePayment.monthly,
+            dealData.hoa.monthly,
+            capEx,
+            maintenance,
+            vacancy,
+            management
+        );
     }
 
     const [showMore, setShowMore] = React.useState(false);
@@ -79,7 +79,7 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
 
     const mainRows = [
         {
-            name: 'Money Down',
+            name: 'Money Upfront',
             data: formatter.format(moneyDown),
         },
         {
@@ -157,7 +157,17 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
         {
             // Interest + Management Fees + Property Taxes + HOA
             name: 'Deductions',
-            data: formatter.format( calculateTaxDeductions( price, percentDown, interestRate, management, monthlyRent, dealData.propertyTaxes.monthly, hoa ) ),
+            data: formatter.format(
+                calculateTaxDeductions(
+                    price,
+                    percentDown,
+                    interestRate,
+                    management,
+                    dealData.grossRent.monthly,
+                    dealData.propertyTaxes.monthly,
+                    dealData.hoa.monthly
+                )
+            ),
         },
         {
             name: 'Yearly Gross Income',
@@ -215,7 +225,7 @@ const Results = ( { allValues }: { allValues: ApplicationData } ) => {
 
             <Grid item xs={12} sm={12} alignContent="flex-start">
                 <Grid container justify="space-between" onClick={ () => setShowMore( ! showMore ) }>
-                    <Typography variant="h6">Expense Breakdown</Typography>
+                    <Typography variant="h6">Monthly Expense Breakdown</Typography>
                     <ExpandMoreIcon color="action" />
                 </Grid>
                 { showMore && ( <Table aria-label="simple table">
