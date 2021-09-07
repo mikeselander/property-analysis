@@ -256,7 +256,7 @@ export const calculateToCashflowGoalByRent = (monthlyMortgagePayment: number, ho
  */
 export const calculateYearlyDepreciationWriteOff = ( purchasePrice: number, basis: number = DEFAULT_BASIS ) : number => {
     // Yearly depreciation rate over 27.5 yrs = 3.636%
-    return ( purchasePrice * basis ) * 0.03636;
+    return ( purchasePrice * basis ) * 0.036363636;
 }
 
 /**
