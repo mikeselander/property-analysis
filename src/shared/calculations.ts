@@ -144,13 +144,27 @@ const calculateMonthlyTaxes = ( purchasePrice: number, taxRate: number ) => {
 /**
  * Calculate the caprate for the money we've put down.
  *
+ * @todo this isn't really caprate and we should use the yearly number.
+ *
  * @param moneyDown
  * @param monthlyCashFlow
  * @returns {number}
  */
 export const calculateCapRate = ( moneyDown: number, monthlyCashFlow: number ) => {
-    return Math.round( ((monthlyCashFlow * 12) / moneyDown) * 100 );
+    return  ((monthlyCashFlow * 12) / moneyDown) * 100;
 };
+
+export const calculateGrossOperatingIncome = ( monthlyRent: number, vacancy: number ) => {
+    return monthlyRent - vacancy;
+}
+
+export const calculateNetOperatingIncome = ( grossOperatingIncome: number, yearlyPropertyTax: number, yearlyInsurance: number, yearlyMaintenance: number, yearlyPropertyManagement: number ) => {
+    return grossOperatingIncome
+        - yearlyPropertyTax
+        - yearlyInsurance
+        - yearlyMaintenance
+        -yearlyPropertyManagement;
+}
 
 /**
  * Calculate the monthly incoming cash, before putting money aside into sinking funds.
