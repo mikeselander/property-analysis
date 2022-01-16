@@ -42,6 +42,11 @@ const Results = ({ allValues }: { allValues: ApplicationData }) => {
 		minimumFractionDigits: 2,
 	});
 
+	const percentFormatter = new Intl.NumberFormat("en-US", {
+		style: "percent",
+		minimumFractionDigits: 2,
+	});
+
 	const dealData = getDealData(allValues);
 
 	const fixedExpenses = calculateMonthlyFixedExpenses(dealData);
@@ -104,7 +109,7 @@ const Results = ({ allValues }: { allValues: ApplicationData }) => {
 		},
 		{
 			name: "Cap Rate",
-			data: `${capRate}%`,
+			data: `${percentFormatter.format(capRate / 100)}`,
 		},
 	];
 
